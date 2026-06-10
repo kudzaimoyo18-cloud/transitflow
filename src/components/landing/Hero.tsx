@@ -14,11 +14,6 @@ export function Hero() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="hero-animate-left">
-            <div className="inline-flex items-center gap-2 bg-primary/10 text-primary text-sm font-medium px-4 py-1.5 rounded-full mb-6">
-              <span className="w-2 h-2 bg-primary rounded-full animate-pulse" />
-              Built for commuter transport companies
-            </div>
-
             <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight leading-[1.1] mb-6">
               Your riders pay, track and ride.{" "}
               <span className="text-primary">You run the business.</span>
@@ -50,21 +45,7 @@ export function Hero() {
 
           <div className="relative hero-animate-right">
             <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-primary/10 border border-border">
-              <Image src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=800&q=80" alt="Commuter bus" width={800} height={500} className="w-full h-auto object-cover" priority />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-              <div className="absolute bottom-6 left-6 right-6">
-                <div className="bg-white/95 backdrop-blur-sm rounded-xl p-4 shadow-lg">
-                  <div className="flex items-center justify-between mb-3">
-                    <span className="text-sm font-semibold">This month</span>
-                    <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full font-medium">Live</span>
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="text-center"><div className="text-xl font-bold text-primary">142</div><div className="text-xs text-muted">Riders paid</div></div>
-                    <div className="text-center"><div className="text-xl font-bold text-accent">8</div><div className="text-xs text-muted">Overdue</div></div>
-                    <div className="text-center"><div className="text-xl font-bold text-green-600">6</div><div className="text-xs text-muted">Buses live</div></div>
-                  </div>
-                </div>
-              </div>
+              <Image src="https://images.unsplash.com/photo-1544620347-c4fd4a3d5957?w=900&q=80" alt="Commuter bus" width={900} height={600} className="w-full h-auto object-cover" priority />
             </div>
           </div>
         </div>
