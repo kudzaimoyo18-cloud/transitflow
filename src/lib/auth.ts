@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { prisma } from "./prisma";
-import type { User, UserRole } from "@/generated/prisma";
+import type { User, UserRole } from "@/generated/prisma/client";
 
 const JWT_SECRET = process.env.JWT_SECRET || "dev-secret-change-in-production";
 const SESSION_DURATION = 30 * 24 * 60 * 60 * 1000;
