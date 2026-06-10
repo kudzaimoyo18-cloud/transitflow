@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
@@ -45,7 +45,7 @@ export function RiderRouteMap({ routeId, stops, home }: Props) {
 
   return (
     <div className="relative">
-      <div className="absolute top-3 left-3 z-[500] px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 border border-border shadow-sm flex items-center gap-1.5">
+      <div className="absolute top-3 right-3 z-[500] px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 border border-border shadow-sm flex items-center gap-1.5">
         <span className={"w-2 h-2 rounded-full " + (live ? "bg-emerald-500 animate-pulse" : "bg-slate-300")} />
         {live ? "Bus is live" : "No bus running now"}
       </div>
