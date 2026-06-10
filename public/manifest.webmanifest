@@ -1,0 +1,12 @@
+﻿{
+  "name": "TransitFlow",
+  "short_name": "TransitFlow",
+  "description": "Pay, track and stay updated on your commute.",
+  "start_url": "/rider",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    { "src": "/icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

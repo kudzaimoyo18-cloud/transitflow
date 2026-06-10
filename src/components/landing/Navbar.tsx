@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Menu, X, Truck } from "lucide-react";
+import { Menu, X, Bus } from "lucide-react";
 
 const navLinks = [
   { href: "#features", label: "Features" },
@@ -20,7 +20,7 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           <Link href="/" className="flex items-center gap-2">
             <div className="w-9 h-9 bg-primary rounded-lg flex items-center justify-center">
-              <Truck className="w-5 h-5 text-white" />
+              <Bus className="w-5 h-5 text-white" />
             </div>
             <span className="text-xl font-bold tracking-tight">
               Transit<span className="text-primary">Flow</span>
