@@ -1,0 +1,403 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  FLEET_OWNER
+  DRIVER
+  COMMISSION_AGENT
+  CUSTOMER
+  ADMIN
+}
+
+enum VehicleStatus {
+  AVAILABLE
+  IN_TRANSIT
+  MAINTENANCE
+  INACTIVE
+}
+
+enum TripStatus {
+  PENDING
+  ASSIGNED
+  IN_TRANSIT
+  DELIVERED
+  CANCELLED
+}
+
+enum BookingStatus {
+  PENDING
+  CONFIRMED
+  IN_TRANSIT
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+enum BidStatus {
+  OPEN
+  ACCEPTED
+  REJECTED
+  EXPIRED
+}
+
+enum InvoiceStatus {
+  DRAFT
+  SENT
+  PAID
+  OVERDUE
+  CANCELLED
+}
+
+enum SubscriptionTier {
+  STARTER
+  PROFESSIONAL
+  ENTERPRISE
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String
+  phone         String?
+  passwordHash  String
+  role          UserRole
+  avatar        String?
+  emailVerified Boolean   @default(false)
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  organization    Organization? @relation(fields: [organizationId], references: [id])
+  organizationId  String?
+
+  driverProfile       DriverProfile?
+  agentProfile        AgentProfile?
+  bookingsAsCustomer  Booking[]       @relation("CustomerBookings")
+  notifications       Notification[]
+  referralsMade       Referral[]      @relation("ReferrerReferrals")
+  referralsReceived   Referral[]      @relation("RefereeReferrals")
+  sessions            Session[]
+
+  @@index([email])
+  @@index([role])
+  @@index([organizationId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Organization {
+  id              String           @id @default(cuid())
+  name            String
+  slug            String           @unique
+  logo            String?
+  address         String?
+  city            String?
+  country         String?
+  phone           String?
+  website         String?
+  taxId           String?
+  subscriptionTier SubscriptionTier @default(STARTER)
+  whopCustomerId  String?
+  isActive        Boolean          @default(true)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  users           User[]
+  vehicles        Vehicle[]
+  bookings        Booking[]
+  trips           Trip[]
+  invoices        Invoice[]
+  payments        Payment[]
+  loadBoardPosts  LoadBoardPost[]
+
+  @@index([slug])
+}
+
+model DriverProfile {
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  licenseNumber   String
+  licenseExpiry   DateTime
+  vehicleId       String?
+  isAvailable     Boolean   @default(true)
+  rating          Float     @default(5.0)
+  totalTrips      Int       @default(0)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vehicle Vehicle? @relation(fields: [vehicleId], references: [id])
+  trips   Trip[]
+
+  @@index([userId])
+  @@index([vehicleId])
+}
+
+model AgentProfile {
+  id              String   @id @default(cuid())
+  userId          String   @unique
+  commissionRate  Float    @default(5.0)
+  totalEarnings   Float    @default(0)
+  totalBookings   Int      @default(0)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bookings Booking[] @relation("AgentBookings")
+
+  @@index([userId])
+}
+
+model Vehicle {
+  id                 String        @id @default(cuid())
+  registrationNumber String
+  make               String
+  model              String
+  year               Int
+  type               String
+  capacity           Float
+  capacityUnit       String        @default("tons")
+  color              String?
+  status             VehicleStatus @default(AVAILABLE)
+  currentLocation    String?
+  fuelType           String?
+  insuranceExpiry    DateTime?
+  fitnessExpiry      DateTime?
+  image              String?
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organizationId String
+
+  drivers DriverProfile[]
+  trips   Trip[]
+
+  @@index([organizationId])
+  @@index([status])
+}
+
+model Booking {
+  id                  String        @id @default(cuid())
+  bookingNumber       String        @unique
+  status              BookingStatus @default(PENDING)
+  pickupAddress       String
+  pickupCity          String
+  deliveryAddress     String
+  deliveryCity        String
+  pickupDate          DateTime
+  deliveryDate        DateTime?
+  cargoType           String
+  cargoWeight         Float
+  cargoWeightUnit     String        @default("tons")
+  description         String?
+  specialInstructions String?
+  quotedPrice         Float
+  finalPrice          Float?
+  distance            Float?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  customer       User          @relation("CustomerBookings", fields: [customerId], references: [id])
+  customerId     String
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  organizationId String
+  agent          AgentProfile? @relation("AgentBookings", fields: [agentId], references: [id])
+  agentId        String?
+
+  trip    Trip?
+  invoice Invoice?
+
+  @@index([customerId])
+  @@index([organizationId])
+  @@index([status])
+  @@index([bookingNumber])
+}
+
+model Trip {
+  id            String     @id @default(cuid())
+  tripNumber    String     @unique
+  status        TripStatus @default(PENDING)
+  startTime     DateTime?
+  endTime       DateTime?
+  startOdometer Float?
+  endOdometer   Float?
+  fuelUsed      Float?
+  notes         String?
+  route         String?
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+
+  booking        Booking       @relation(fields: [bookingId], references: [id])
+  bookingId      String        @unique
+  driver         DriverProfile @relation(fields: [driverId], references: [id])
+  driverId       String
+  vehicle        Vehicle       @relation(fields: [vehicleId], references: [id])
+  vehicleId      String
+  organization   Organization  @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  trackingUpdates TripTracking[]
+
+  @@index([driverId])
+  @@index([vehicleId])
+  @@index([organizationId])
+  @@index([status])
+}
+
+model TripTracking {
+  id        String   @id @default(cuid())
+  latitude  Float
+  longitude Float
+  speed     Float?
+  heading   Float?
+  note      String?
+  createdAt DateTime @default(now())
+
+  trip   Trip   @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  tripId String
+
+  @@index([tripId])
+  @@index([createdAt])
+}
+
+model Invoice {
+  id            String        @id @default(cuid())
+  invoiceNumber String        @unique
+  status        InvoiceStatus @default(DRAFT)
+  subtotal      Float
+  tax           Float         @default(0)
+  discount      Float         @default(0)
+  total         Float
+  dueDate       DateTime
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  booking        Booking      @relation(fields: [bookingId], references: [id])
+  bookingId      String       @unique
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  payments Payment[]
+
+  @@index([organizationId])
+  @@index([status])
+}
+
+model Payment {
+  id              String        @id @default(cuid())
+  amount          Float
+  currency        String        @default("USD")
+  status          PaymentStatus @default(PENDING)
+  method          String?
+  transactionRef  String?
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  invoice        Invoice      @relation(fields: [invoiceId], references: [id])
+  invoiceId      String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  @@index([invoiceId])
+  @@index([organizationId])
+  @@index([status])
+}
+
+model LoadBoardPost {
+  id           String   @id @default(cuid())
+  title        String
+  pickupCity   String
+  deliveryCity String
+  pickupDate   DateTime
+  cargoType    String
+  weight       Float
+  weightUnit   String   @default("tons")
+  budget       Float?
+  description  String?
+  isActive     Boolean  @default(true)
+  expiresAt    DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  organization   Organization @relation(fields: [organizationId], references: [id])
+  organizationId String
+
+  bids LoadBoardBid[]
+
+  @@index([organizationId])
+  @@index([isActive])
+  @@index([pickupCity, deliveryCity])
+}
+
+model LoadBoardBid {
+  id        String    @id @default(cuid())
+  amount    Float
+  message   String?
+  status    BidStatus @default(OPEN)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  post     LoadBoardPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId   String
+  bidderId String
+
+  @@index([postId])
+  @@index([bidderId])
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  title     String
+  message   String
+  type      String
+  isRead    Boolean  @default(false)
+  link      String?
+  createdAt DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model Referral {
+  id         String   @id @default(cuid())
+  code       String   @unique
+  reward     Float    @default(0)
+  isRedeemed Boolean  @default(false)
+  createdAt  DateTime @default(now())
+
+  referrer   User   @relation("ReferrerReferrals", fields: [referrerId], references: [id])
+  referrerId String
+  referee    User?  @relation("RefereeReferrals", fields: [refereeId], references: [id])
+  refereeId  String?
+
+  @@index([referrerId])
+  @@index([code])
+}
