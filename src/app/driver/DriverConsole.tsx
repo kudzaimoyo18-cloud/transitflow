@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -64,13 +64,14 @@ export function DriverConsole({ orgId, driverName, routes, activeTrip }: { orgId
     if (error) { alert(error.message); return; }
     const t = data as unknown as ActiveTrip;
     setTrip(t);
-    await event("departed", null, route.id);
+    await event("departed", null, route.id, t.id);
     startStreaming(t.id);
   }
 
-  async function event(type: string, stopId: string | null, routeId?: string) {
-    if (!trip && !routeId) return;
-    await supabase.from("trip_events").insert({ trip_id: trip?.id, org_id: orgId, type, stop_id: stopId });
+  async function event(type: string, stopId: string | null, routeId?: string, tripIdOverride?: string) {
+    const tripId = tripIdOverride ?? trip?.id;
+    if (!tripId) return;
+    await supabase.from("trip_events").insert({ trip_id: tripId, org_id: orgId, type, stop_id: stopId });
     const rid = routeId ?? trip!.route_id;
     const labels: Record<string, string> = {
       departed: "Your bus has departed", arrived_stop: "Your bus has arrived at a stop",
