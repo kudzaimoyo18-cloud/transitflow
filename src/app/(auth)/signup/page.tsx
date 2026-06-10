@@ -19,10 +19,12 @@ export default function SignupPage() {
     setError(null);
     setPending(true);
     const form = new FormData(e.currentTarget);
+    const email = String(form.get("email"));
+    const password = String(form.get("password"));
     const supabase = createClient();
-    const { error } = await supabase.auth.signUp({
-      email: String(form.get("email")),
-      password: String(form.get("password")),
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
       options: {
         data: {
           full_name: String(form.get("full_name")),
@@ -35,6 +37,16 @@ export default function SignupPage() {
       setError(error.message);
       setPending(false);
       return;
+    }
+    // New users are auto-confirmed via DB trigger; if signUp did not return a
+    // session (email-confirmation flow), sign in immediately so onboarding works.
+    if (!data.session) {
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
+      if (signInError) {
+        setError(signInError.message);
+        setPending(false);
+        return;
+      }
     }
     router.replace("/onboarding");
     router.refresh();
