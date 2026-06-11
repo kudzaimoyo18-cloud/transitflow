@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Bus, Building2, User, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
 
 type Mode = "rider" | "org_owner";
 
@@ -114,6 +115,9 @@ export default function SignupPage() {
           {pending ? "Creating..." : "Create account"}
         </button>
       </form>
+
+      <OrDivider />
+      <GoogleButton label="Sign up with Google" />
 
       <p className="mt-6 text-center text-sm text-muted">
         Already have an account?{" "}

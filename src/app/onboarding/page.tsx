@@ -1,7 +1,6 @@
 import { redirect } from "next/navigation";
 import { requireContext } from "@/lib/session";
-import { CreateOrgForm } from "./CreateOrgForm";
-import { JoinForm } from "./JoinForm";
+import { OnboardingChooser } from "./OnboardingChooser";
 
 export default async function OnboardingPage() {
   const ctx = await requireContext();
@@ -19,11 +18,10 @@ export default async function OnboardingPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface p-6">
       <div className="w-full max-w-md bg-background rounded-2xl border border-border shadow-sm p-8">
-        {role === "org_owner" ? (
-          <CreateOrgForm name={ctx.profile?.full_name ?? ""} />
-        ) : (
-          <JoinForm role={role === "driver" ? "driver" : "rider"} />
-        )}
+        <OnboardingChooser
+          name={ctx.profile?.full_name ?? ""}
+          initial={role === "org_owner" ? "company" : "rider"}
+        />
       </div>
     </div>
   );

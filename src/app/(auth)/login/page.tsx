@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Bus, Eye, EyeOff, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { GoogleButton, OrDivider } from "@/components/auth/GoogleButton";
 
 function LoginForm() {
   const router = useRouter();
@@ -79,6 +80,9 @@ function LoginForm() {
           {pending ? "Signing in..." : "Sign in"}
         </button>
       </form>
+
+      <OrDivider />
+      <GoogleButton />
 
       <p className="mt-8 text-center text-sm text-muted">
         Don&apos;t have an account?{" "}
