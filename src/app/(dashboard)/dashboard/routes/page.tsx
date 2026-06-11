@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { requireContext } from "@/lib/session";
 import { createRoute, deleteRoute } from "../../actions";
 import { Trash2, MapPin } from "lucide-react";
@@ -14,29 +14,29 @@ export default async function RoutesPage() {
 
   return (
     <>
-      <header className="px-6 py-4 border-b border-border bg-white"><h1 className="text-xl font-bold">Routes</h1></header>
+      <header className="px-6 py-4 border-b border-border bg-background"><h1 className="font-display text-xl font-bold">Routes</h1></header>
       <div className="p-6 grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-3">
           {(routes ?? []).length === 0 && <p className="text-muted text-sm">No routes yet. Create one to start.</p>}
           {(routes ?? []).map((r) => {
             const rr = r as unknown as { id: string; name: string; origin: string; destination: string; departure_time: string; monthly_price: number; buses: { label: string } | null; stops: { id: string }[] };
             return (
-              <div key={rr.id} className="rounded-xl border border-border bg-white p-4 flex items-start gap-4">
+              <div key={rr.id} className="rounded-xl border border-border bg-background p-4 flex items-start gap-4">
                 <div className="flex-1">
                   <p className="font-semibold">{rr.name}</p>
                   <p className="text-sm text-muted flex items-center gap-1"><MapPin className="w-3 h-3" />{rr.origin} to {rr.destination}</p>
                   <p className="text-xs text-muted mt-1">Departs {rr.departure_time?.slice(0,5)} - {rr.stops?.length ?? 0} stops - {rr.buses?.label ? rr.buses.label + " - " : ""}{org.name}</p>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-primary">{new Intl.NumberFormat("en-US",{style:"currency",currency:org.currency,maximumFractionDigits:0}).format(Number(rr.monthly_price))}<span className="text-xs text-muted font-normal">/mo</span></p>
-                  <form action={deleteRoute}><input type="hidden" name="id" value={rr.id} /><button className="text-muted hover:text-red-500 mt-2"><Trash2 className="w-4 h-4" /></button></form>
+                  <p className="font-display font-bold">{new Intl.NumberFormat("en-US",{style:"currency",currency:org.currency,maximumFractionDigits:0}).format(Number(rr.monthly_price))}<span className="text-xs text-muted font-normal">/mo</span></p>
+                  <form action={deleteRoute}><input type="hidden" name="id" value={rr.id} /><button className="text-muted hover:text-danger mt-2"><Trash2 className="w-4 h-4" /></button></form>
                 </div>
               </div>
             );
           })}
         </div>
 
-        <form action={createRoute} className="rounded-xl border border-border bg-white p-4 space-y-3 h-fit">
+        <form action={createRoute} className="rounded-xl border border-border bg-background p-4 space-y-3 h-fit">
           <h2 className="font-semibold">New route</h2>
           <input type="hidden" name="org_id" value={org.id} />
           <input name="name" required placeholder="Route name (e.g. City - Marina)" className="w-full px-3 py-2 rounded-lg border border-border text-sm" />
@@ -60,7 +60,7 @@ export default async function RoutesPage() {
             ))}
           </div>
           <textarea name="stops" rows={3} placeholder="Stops, one per line (in order)" className="w-full px-3 py-2 rounded-lg border border-border text-sm" />
-          <button className="w-full py-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium">Create route</button>
+          <button className="w-full py-2 rounded-lg bg-primary hover:bg-primary-dark text-primary-on text-sm font-medium">Create route</button>
         </form>
       </div>
     </>

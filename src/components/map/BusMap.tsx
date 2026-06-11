@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useRef } from "react";
 import L from "leaflet";
@@ -13,14 +13,14 @@ export interface MapPoint {
 }
 
 const COLORS: Record<MapPoint["kind"], string> = {
-  bus: "#2563eb",
-  stop: "#64748b",
-  home: "#f97316",
+  bus: "#06c167",
+  stop: "#9ca3af",
+  home: "#888888",
 };
 
 function iconFor(p: MapPoint) {
   const size = p.kind === "bus" ? 28 : 16;
-  const ring = p.kind === "bus" ? "box-shadow:0 0 0 4px rgba(37,99,235,.25);" : "";
+  const ring = p.kind === "bus" ? "box-shadow:0 0 0 4px rgba(6,193,103,.3);" : "";
   return L.divIcon({
     className: "",
     html:

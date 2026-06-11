@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { requireContext } from "@/lib/session";
 import { BottomNav } from "@/components/rider/BottomNav";
 
@@ -9,7 +9,7 @@ export default async function RiderLayout({ children }: { children: React.ReactN
   if (!rider) redirect(staff ? "/dashboard" : "/onboarding");
 
   return (
-    <div className="min-h-screen bg-surface max-w-md mx-auto pb-16 relative">
+    <div className="min-h-screen bg-background max-w-md mx-auto pb-20 relative border-x border-border">
       {children}
       <BottomNav />
     </div>

@@ -1,65 +1,126 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ──────────────────────────────────────────────────────────────
+ * TransitFlow - Mobility Mono design system (Uber-inspired)
+ * Pure black/white duality - pill-shaped interactive elements -
+ * signal green reserved for live + paid states only.
+ * ────────────────────────────────────────────────────────────── */
+
 :root {
   --background: #ffffff;
-  --foreground: #0f172a;
-  --primary: #2563eb;
-  --primary-dark: #1d4ed8;
-  --accent: #f97316;
-  --muted: #64748b;
-  --border: #e2e8f0;
-  --surface: #f8fafc;
+  --foreground: #000000;
+  --surface: #f6f6f6;
+  --surface-2: #efefef;
+  --muted: #4b4b4b;
+  --meta: #afafaf;
+  --border: rgba(0, 0, 0, 0.10);
+  --border-strong: #000000;
+
+  --primary: #000000;
+  --primary-on: #ffffff;
+  --primary-dark: #2c2c2c;   /* hover for black CTAs (legacy name) */
+  --primary-soft: #efefef;   /* chip / secondary button bg */
+
+  --signal: #06c167;         /* live + paid - the only color */
+  --signal-soft: #e6f9ef;
+  --accent: #06c167;         /* legacy alias */
+
+  --warn: #b58900;
+  --warn-soft: #fdf4d7;
+  --danger: #dc2626;
+  --danger-soft: #fdecec;
+
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08), 0 0 1px rgba(0, 0, 0, 0.08);
+  --shadow-float: 0 6px 24px rgba(0, 0, 0, 0.16);
+}
+
+.dark {
+  --background: #0a0a0a;
+  --foreground: #ffffff;
+  --surface: #161616;
+  --surface-2: #222222;
+  --muted: #a8a8a8;
+  --meta: #6f6f6f;
+  --border: rgba(255, 255, 255, 0.14);
+  --border-strong: #ffffff;
+
+  --primary: #ffffff;
+  --primary-on: #000000;
+  --primary-dark: #d9d9d9;
+  --primary-soft: #222222;
+
+  --signal: #06c167;
+  --signal-soft: rgba(6, 193, 103, 0.16);
+  --accent: #06c167;
+
+  --warn: #eab308;
+  --warn-soft: rgba(234, 179, 8, 0.14);
+  --danger: #f87171;
+  --danger-soft: rgba(220, 38, 38, 0.18);
+
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.1);
+  --shadow-float: 0 6px 24px rgba(0, 0, 0, 0.6);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --color-primary: var(--primary);
-  --color-primary-dark: var(--primary-dark);
-  --color-accent: var(--accent);
-  --color-muted: var(--muted);
-  --color-border: var(--border);
   --color-surface: var(--surface);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface-2: var(--surface-2);
+  --color-muted: var(--muted);
+  --color-meta: var(--meta);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-on: var(--primary-on);
+  --color-primary-dark: var(--primary-dark);
+  --color-primary-soft: var(--primary-soft);
+  --color-signal: var(--signal);
+  --color-signal-soft: var(--signal-soft);
+  --color-accent: var(--accent);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
+  --radius-pill: 999px;
+  --shadow-card: var(--shadow-card);
+  --shadow-float: var(--shadow-float);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-sans), system-ui, sans-serif;
+  font-family: var(--font-inter), system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-space-grotesk), var(--font-inter), system-ui, sans-serif;
+  letter-spacing: -0.02em;
 }
 
 html {
   scroll-behavior: smooth;
 }
 
+/* pill helper for interactive elements */
+.pill { border-radius: 999px; }
+
+/* leaflet dark-mode tile treatment */
+.dark .leaflet-tile { filter: invert(1) hue-rotate(180deg) brightness(0.9) contrast(0.9); }
+.dark .leaflet-container { background: #161616; }
+
 @keyframes hero-fade-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
 @keyframes hero-fade-right {
-  from {
-    opacity: 0;
-    transform: translateX(40px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
+  from { opacity: 0; transform: translateX(40px); }
+  to { opacity: 1; transform: translateX(0); }
 }
-
-.hero-animate-left {
-  animation: hero-fade-up 0.6s ease-out both;
-}
-
-.hero-animate-right {
-  animation: hero-fade-right 0.7s ease-out 0.2s both;
-}
+.hero-animate-left { animation: hero-fade-up 0.6s ease-out both; }
+.hero-animate-right { animation: hero-fade-right 0.7s ease-out 0.2s both; }

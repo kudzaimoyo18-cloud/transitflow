@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { requireContext } from "@/lib/session";
 import { FleetMap } from "@/components/map/FleetMap";
 import { TrendingUp, Users, AlertTriangle, Wallet, Phone } from "lucide-react";
@@ -35,16 +35,16 @@ export default async function OverviewPage() {
   const overdue = (overdueRes.data ?? []) as unknown as Array<{ id: string; next_due_date: string; monthly_price: number; profiles: { full_name: string; phone: string | null } | null; routes: { name: string } | null }>;
 
   const cards = [
-    { label: "Collected this month", value: money(collected, org.currency), icon: Wallet, tint: "text-emerald-600 bg-emerald-50" },
-    { label: "Monthly recurring (MRR)", value: money(mrr, org.currency), icon: TrendingUp, tint: "text-primary bg-primary/10" },
-    { label: "Paid riders", value: paid + " / " + (paid + unpaid), icon: Users, tint: "text-blue-600 bg-blue-50" },
-    { label: "Profit this month", value: money(profit, org.currency), icon: TrendingUp, tint: (profit >= 0 ? "text-emerald-600 bg-emerald-50" : "text-red-600 bg-red-50") },
+    { label: "Collected this month", value: money(collected, org.currency), icon: Wallet, tint: "text-signal bg-signal-soft" },
+    { label: "Monthly recurring (MRR)", value: money(mrr, org.currency), icon: TrendingUp, tint: "text-foreground bg-surface-2" },
+    { label: "Paid riders", value: paid + " / " + (paid + unpaid), icon: Users, tint: "text-foreground bg-surface-2" },
+    { label: "Profit this month", value: money(profit, org.currency), icon: TrendingUp, tint: (profit >= 0 ? "text-signal bg-signal-soft" : "text-danger bg-danger-soft") },
   ];
 
   return (
     <>
-      <header className="px-6 py-4 border-b border-border bg-white">
-        <h1 className="text-xl font-bold">Overview</h1>
+      <header className="px-6 py-4 border-b border-border bg-background">
+        <h1 className="font-display text-xl font-bold">Overview</h1>
         <p className="text-sm text-muted">{org.name}</p>
       </header>
 
@@ -53,7 +53,7 @@ export default async function OverviewPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {cards.map((c) => (
-            <div key={c.label} className="rounded-xl border border-border bg-white p-4">
+            <div key={c.label} className="rounded-xl border border-border bg-background p-4">
               <div className={"w-9 h-9 rounded-lg flex items-center justify-center mb-3 " + c.tint}>
                 <c.icon className="w-5 h-5" />
               </div>
@@ -63,9 +63,9 @@ export default async function OverviewPage() {
           ))}
         </div>
 
-        <div className="rounded-xl border border-border bg-white overflow-hidden">
+        <div className="rounded-xl border border-border bg-background overflow-hidden">
           <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
-            <AlertTriangle className="w-4 h-4 text-red-500" />
+            <AlertTriangle className="w-4 h-4 text-danger" />
             <h2 className="font-semibold">Overdue riders</h2>
             <span className="ml-auto text-sm text-muted">{overdue.length} to chase</span>
           </div>
@@ -79,7 +79,7 @@ export default async function OverviewPage() {
                     <p className="font-medium truncate">{o.profiles?.full_name ?? "Rider"}</p>
                     <p className="text-xs text-muted">{o.routes?.name} - due {o.next_due_date}</p>
                   </div>
-                  <span className="text-sm font-semibold text-red-600">{money(Number(o.monthly_price), org.currency)}</span>
+                  <span className="text-sm font-semibold text-danger">{money(Number(o.monthly_price), org.currency)}</span>
                   {o.profiles?.phone && (
                     <a href={"tel:" + o.profiles.phone} className="p-2 rounded-lg border border-border hover:bg-surface" title="Call">
                       <Phone className="w-4 h-4 text-muted" />

@@ -17,7 +17,7 @@ const plans = [
   {
     name: "Growth",
     price: "$19",
-    period: "/bus / month",
+    period: "/bus/mo",
     description: "For companies running multiple buses",
     features: ["Unlimited riders", "Live bus tracking", "Cost tracking & accounting", "Revenue & profit dashboard", "Announcements", "Multiple drivers", "Priority support"],
     cta: "Start your company",
@@ -36,37 +36,39 @@ const plans = [
 
 export function Pricing() {
   return (
-    <section id="pricing" className="py-20 lg:py-28">
+    <section id="pricing" className="py-20 lg:py-28 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-            Pricing that scales with your <span className="text-primary">fleet</span>
+        <div className="max-w-2xl mb-16">
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Pricing that scales with your fleet
           </h2>
           <p className="text-lg text-muted">Start free with one bus. Pay per bus as you grow. Riders always use the app for free.</p>
         </div>
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+
+        <div className="grid md:grid-cols-3 gap-4 max-w-5xl">
           {plans.map((plan, i) => (
             <motion.div key={plan.name}
               initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.4, delay: i * 0.1 }}
-              className={`relative rounded-2xl p-8 ${plan.popular ? "bg-primary text-white shadow-xl shadow-primary/20 scale-105" : "bg-white border border-border"}`}>
+              className={`relative rounded-3xl p-8 ${plan.popular ? "bg-primary text-primary-on" : "bg-surface"}`}>
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-white text-xs font-bold px-4 py-1 rounded-full">Most Popular</div>
+                <div className="pill absolute -top-3 left-8 bg-signal text-black text-xs font-bold px-4 py-1">Most popular</div>
               )}
-              <h3 className={`text-lg font-semibold mb-1 ${plan.popular ? "text-white" : ""}`}>{plan.name}</h3>
-              <p className={`text-sm mb-6 ${plan.popular ? "text-blue-100" : "text-muted"}`}>{plan.description}</p>
-              <div className="mb-6">
-                <span className="text-4xl font-bold">{plan.price}</span>
-                <span className={`text-sm ${plan.popular ? "text-blue-100" : "text-muted"}`}>{plan.period}</span>
+              <h3 className="font-display text-lg font-bold mb-1">{plan.name}</h3>
+              <p className={`text-sm mb-6 ${plan.popular ? "opacity-60" : "text-muted"}`}>{plan.description}</p>
+              <div className="mb-7">
+                <span className="font-display text-5xl font-bold">{plan.price}</span>
+                <span className={`text-sm ${plan.popular ? "opacity-60" : "text-muted"}`}>{plan.period}</span>
               </div>
               <ul className="space-y-3 mb-8">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2 text-sm">
-                    <Check className={`w-4 h-4 mt-0.5 shrink-0 ${plan.popular ? "text-blue-200" : "text-green-500"}`} />
-                    <span className={plan.popular ? "text-blue-50" : "text-muted"}>{feature}</span>
+                    <Check className="w-4 h-4 mt-0.5 shrink-0 text-signal" />
+                    <span className={plan.popular ? "opacity-80" : "text-muted"}>{feature}</span>
                   </li>
                 ))}
               </ul>
-              <Link href="/signup" className={`block text-center font-medium py-3 rounded-xl transition-colors ${plan.popular ? "bg-white text-primary hover:bg-blue-50" : "bg-primary text-white hover:bg-primary-dark"}`}>
+              <Link href="/signup"
+                className={`pill block text-center font-semibold py-3.5 transition-colors ${plan.popular ? "bg-primary-on text-primary hover:opacity-90" : "bg-primary text-primary-on hover:bg-primary-dark"}`}>
                 {plan.cta}
               </Link>
             </motion.div>

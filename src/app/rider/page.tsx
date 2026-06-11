@@ -8,17 +8,16 @@ function money(n: number, ccy: string) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: ccy, maximumFractionDigits: 0 }).format(n || 0);
 }
 const BADGE: Record<string, string> = {
-  active: "bg-emerald-50 text-emerald-700 border-emerald-200",
-  due: "bg-amber-50 text-amber-700 border-amber-200",
-  overdue: "bg-red-50 text-red-700 border-red-200",
-  cancelled: "bg-slate-100 text-slate-500 border-slate-200",
+  active: "bg-signal-soft text-signal",
+  due: "bg-warn-soft text-warn",
+  overdue: "bg-danger-soft text-danger",
+  cancelled: "bg-surface-2 text-meta",
 };
 const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
 function formatDays(days: number[]) {
   if (!days?.length) return "";
-  const sorted = [...days].sort((a, b) => a - b);
-  return sorted.map((d) => DAYS[d]).join(", ");
+  return [...days].sort((a, b) => a - b).map((d) => DAYS[d]).join(", ");
 }
 
 export default async function RiderHome() {
@@ -31,10 +30,12 @@ export default async function RiderHome() {
 
   if (!sub) {
     return (
-      <div className="p-6 text-center space-y-4 pt-20">
-        <h1 className="text-xl font-bold">Welcome aboard</h1>
+      <div className="p-6 text-center space-y-5 pt-24">
+        <h1 className="font-display text-2xl font-bold">Welcome aboard</h1>
         <p className="text-muted">You are not subscribed to a route yet.</p>
-        <Link href="/rider/subscribe" className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-primary text-white font-medium">Choose your route <ArrowRight className="w-4 h-4" /></Link>
+        <Link href="/rider/subscribe" className="pill inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-on font-semibold">
+          Choose your route <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     );
   }
@@ -51,45 +52,44 @@ export default async function RiderHome() {
 
   return (
     <div>
-      <header className="px-4 pt-5 pb-3">
-        <p className="text-xs text-muted">{s.organizations.name}</p>
-        <h1 className="text-lg font-bold">{s.routes.name}</h1>
+      <header className="px-4 pt-6 pb-4">
+        <p className="text-xs font-medium text-meta uppercase tracking-wider">{s.organizations.name}</p>
+        <h1 className="font-display text-2xl font-bold mt-0.5">{s.routes.name}</h1>
         <p className="text-sm text-muted">{s.routes.origin} to {s.routes.destination}</p>
-        <div className="flex flex-wrap gap-2 mt-2">
+        <div className="flex flex-wrap gap-2 mt-3">
           {departure && (
-            <span className="inline-flex items-center gap-1 text-xs bg-surface border border-border rounded-full px-2.5 py-1"><Clock className="w-3 h-3 text-primary" />Departs {departure}</span>
+            <span className="pill inline-flex items-center gap-1.5 text-xs font-medium bg-surface px-3 py-1.5"><Clock className="w-3 h-3" />Departs {departure}</span>
           )}
           {pickupStop && (
-            <span className="inline-flex items-center gap-1 text-xs bg-surface border border-border rounded-full px-2.5 py-1"><MapPin className="w-3 h-3 text-primary" />{pickupStop.name}</span>
+            <span className="pill inline-flex items-center gap-1.5 text-xs font-medium bg-surface px-3 py-1.5"><MapPin className="w-3 h-3" />{pickupStop.name}</span>
           )}
         </div>
       </header>
 
-      <div className="rounded-xl overflow-hidden border-y border-border">
+      <div className="mx-4 rounded-3xl overflow-hidden shadow-card">
         <RiderRouteMap routeId={s.routes.id} stops={s.routes.stops ?? []} home={{ lat: s.home_lat, lng: s.home_lng }} />
       </div>
 
-      <div className="p-4 space-y-4">
-        <Link href="/rider/pay" className={"block rounded-xl border p-4 " + (BADGE[s.status] ?? "")}>
+      <div className="p-4 space-y-3">
+        <Link href="/rider/pay" className={"block rounded-3xl p-5 " + (BADGE[s.status] ?? "")}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs uppercase tracking-wide font-medium">Payment {s.status}</p>
-              <p className="text-2xl font-bold mt-1">{money(Number(s.monthly_price), s.organizations.currency)}<span className="text-sm font-normal">/mo</span></p>
-              <p className="text-sm mt-0.5">{s.status === "active" ? "Paid until " : "Due "}{s.next_due_date}</p>
+              <p className="text-[11px] uppercase tracking-widest font-bold opacity-80">Payment {s.status}</p>
+              <p className="font-display text-3xl font-bold mt-1">{money(Number(s.monthly_price), s.organizations.currency)}<span className="text-sm font-normal opacity-70">/mo</span></p>
+              <p className="text-sm mt-0.5 opacity-80">{s.status === "active" ? "Paid until " : "Due "}{s.next_due_date}</p>
             </div>
-            <div className="flex flex-col items-center gap-1">
+            <div className="pill bg-background/60 p-3.5">
               <CreditCard className="w-6 h-6" />
-              <span className="text-xs font-medium">{s.status === "active" ? "View" : "Pay now"}</span>
             </div>
           </div>
         </Link>
 
-        <div className="rounded-xl border border-border bg-white p-4">
-          <p className="font-semibold text-sm mb-3">Your journey</p>
-          <div className="space-y-2.5 text-sm">
-            <div className="flex items-center gap-2.5"><CalendarDays className="w-4 h-4 text-muted shrink-0" /><span className="text-muted">Runs</span><span className="ml-auto font-medium">{formatDays(s.routes.days_of_week)}</span></div>
-            <div className="flex items-center gap-2.5"><Clock className="w-4 h-4 text-muted shrink-0" /><span className="text-muted">Departs</span><span className="ml-auto font-medium">{departure}</span></div>
-            <div className="flex items-center gap-2.5"><MapPin className="w-4 h-4 text-muted shrink-0" /><span className="text-muted">Your stop</span><span className="ml-auto font-medium">{pickupStop?.name ?? "Not set"}</span></div>
+        <div className="rounded-3xl bg-surface p-5">
+          <p className="font-display font-semibold text-sm mb-4">Your journey</p>
+          <div className="space-y-3 text-sm">
+            <div className="flex items-center gap-3"><CalendarDays className="w-4 h-4 text-meta shrink-0" /><span className="text-muted">Runs</span><span className="ml-auto font-medium">{formatDays(s.routes.days_of_week)}</span></div>
+            <div className="flex items-center gap-3"><Clock className="w-4 h-4 text-meta shrink-0" /><span className="text-muted">Departs</span><span className="ml-auto font-medium">{departure}</span></div>
+            <div className="flex items-center gap-3"><MapPin className="w-4 h-4 text-meta shrink-0" /><span className="text-muted">Your stop</span><span className="ml-auto font-medium">{pickupStop?.name ?? "Not set"}</span></div>
           </div>
         </div>
       </div>

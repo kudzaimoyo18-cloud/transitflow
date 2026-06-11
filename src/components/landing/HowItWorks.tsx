@@ -29,28 +29,27 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="py-20 lg:py-28 bg-surface">
+    <section id="how-it-works" className="py-20 lg:py-28 bg-primary text-primary-on">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-16">
-          <h2 className="text-3xl sm:text-4xl font-bold tracking-tight mb-4">
-            Up and running in <span className="text-primary">three steps</span>
+        <div className="max-w-2xl mb-16">
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Up and running in three steps
           </h2>
-          <p className="text-lg text-muted">From spreadsheets and cash to a paid, tracked, modern service - in an afternoon.</p>
+          <p className="text-lg opacity-60">From spreadsheets and cash to a paid, tracked, modern service - in an afternoon.</p>
         </div>
-        <div className="space-y-16 lg:space-y-24">
+
+        <div className="grid lg:grid-cols-3 gap-6">
           {steps.map((step, i) => (
             <motion.div key={step.step}
-              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5 }}
-              className="grid lg:grid-cols-2 gap-10 items-center">
-              <div className={i % 2 === 1 ? "lg:order-2" : ""}>
-                <div className="text-5xl font-black text-primary/10 mb-4">{step.step}</div>
-                <h3 className="text-2xl font-bold mb-3">{step.title}</h3>
-                <p className="text-muted leading-relaxed max-w-md">{step.description}</p>
+              initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: i * 0.1 }}
+              className="rounded-3xl overflow-hidden bg-primary-on/5 border border-primary-on/10">
+              <div className="h-48 overflow-hidden">
+                <Image src={step.image} alt={step.alt} width={600} height={300} className="w-full h-full object-cover" />
               </div>
-              <div className={i % 2 === 1 ? "lg:order-1" : ""}>
-                <div className="rounded-2xl overflow-hidden shadow-xl">
-                  <Image src={step.image} alt={step.alt} width={600} height={400} className="w-full h-64 lg:h-80 object-cover" />
-                </div>
+              <div className="p-6">
+                <div className="font-display text-sm font-bold opacity-40 mb-2">{step.step}</div>
+                <h3 className="font-display text-xl font-bold mb-2.5">{step.title}</h3>
+                <p className="text-sm opacity-60 leading-relaxed">{step.description}</p>
               </div>
             </motion.div>
           ))}

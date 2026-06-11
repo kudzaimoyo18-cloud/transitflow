@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { requireContext } from "@/lib/session";
 import { createExpense } from "../../actions";
 
@@ -24,15 +24,15 @@ export default async function ExpensesPage() {
 
   return (
     <>
-      <header className="px-6 py-4 border-b border-border bg-white"><h1 className="text-xl font-bold">Expenses &amp; Accounting</h1></header>
+      <header className="px-6 py-4 border-b border-border bg-background"><h1 className="font-display text-xl font-bold">Expenses &amp; Accounting</h1></header>
       <div className="p-6 grid lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2 space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="rounded-xl border border-border bg-white p-3"><p className="text-xs text-muted">This month</p><p className="text-lg font-bold">{money(monthTotal, org.currency)}</p></div>
-            {["fuel","maintenance"].map((c)=>(<div key={c} className="rounded-xl border border-border bg-white p-3"><p className="text-xs text-muted capitalize">{c}</p><p className="text-lg font-bold">{money(byCat[c] ?? 0, org.currency)}</p></div>))}
-            <div className="rounded-xl border border-border bg-white p-3"><p className="text-xs text-muted">Other</p><p className="text-lg font-bold">{money((monthTotal - (byCat["fuel"]??0) - (byCat["maintenance"]??0)), org.currency)}</p></div>
+            <div className="rounded-xl border border-border bg-background p-3"><p className="text-xs text-muted">This month</p><p className="text-lg font-bold">{money(monthTotal, org.currency)}</p></div>
+            {["fuel","maintenance"].map((c)=>(<div key={c} className="rounded-xl border border-border bg-background p-3"><p className="text-xs text-muted capitalize">{c}</p><p className="text-lg font-bold">{money(byCat[c] ?? 0, org.currency)}</p></div>))}
+            <div className="rounded-xl border border-border bg-background p-3"><p className="text-xs text-muted">Other</p><p className="text-lg font-bold">{money((monthTotal - (byCat["fuel"]??0) - (byCat["maintenance"]??0)), org.currency)}</p></div>
           </div>
-          <div className="rounded-xl border border-border bg-white overflow-hidden">
+          <div className="rounded-xl border border-border bg-background overflow-hidden">
             <div className="px-4 py-3 border-b border-border"><h2 className="font-semibold">Recent expenses</h2></div>
             {list.length === 0 ? <div className="p-6 text-center text-muted text-sm">No expenses recorded.</div> : (
               <table className="w-full text-sm">
@@ -44,7 +44,7 @@ export default async function ExpensesPage() {
             )}
           </div>
         </div>
-        <form action={createExpense} className="rounded-xl border border-border bg-white p-4 space-y-3 h-fit">
+        <form action={createExpense} className="rounded-xl border border-border bg-background p-4 space-y-3 h-fit">
           <h2 className="font-semibold">Add expense</h2>
           <input type="hidden" name="org_id" value={org.id} />
           <input type="hidden" name="currency" value={org.currency} />
@@ -53,7 +53,7 @@ export default async function ExpensesPage() {
           <input name="amount" type="number" min="0" step="0.01" required placeholder={"Amount (" + org.currency + ")"} className="w-full px-3 py-2 rounded-lg border border-border text-sm" />
           <input name="expense_date" type="date" defaultValue={today()} className="w-full px-3 py-2 rounded-lg border border-border text-sm" />
           <input name="description" placeholder="Note (optional)" className="w-full px-3 py-2 rounded-lg border border-border text-sm" />
-          <button className="w-full py-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium">Add expense</button>
+          <button className="w-full py-2 rounded-lg bg-primary hover:bg-primary-dark text-primary-on text-sm font-medium">Add expense</button>
         </form>
       </div>
     </>

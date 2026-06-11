@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { requireContext } from "@/lib/session";
 import { updateOrgSettings } from "../../actions";
 import { InviteCode } from "./InviteCode";
@@ -12,15 +12,15 @@ export default async function SettingsPage() {
 
   return (
     <>
-      <header className="px-6 py-4 border-b border-border bg-white"><h1 className="text-xl font-bold">Settings</h1></header>
+      <header className="px-6 py-4 border-b border-border bg-background"><h1 className="font-display text-xl font-bold">Settings</h1></header>
       <div className="p-6 max-w-2xl space-y-6">
-        <div className="rounded-xl border border-border bg-white p-5">
+        <div className="rounded-xl border border-border bg-background p-5">
           <h2 className="font-semibold mb-1">Rider invite code</h2>
           <p className="text-sm text-muted mb-3">Share this code (or link) so riders & drivers can join {o.name}.</p>
           <InviteCode code={o.invite_code} />
         </div>
 
-        <form action={updateOrgSettings} className="rounded-xl border border-border bg-white p-5 space-y-4">
+        <form action={updateOrgSettings} className="rounded-xl border border-border bg-background p-5 space-y-4">
           <input type="hidden" name="org_id" value={o.id} />
           <h2 className="font-semibold">Payment links</h2>
           <p className="text-sm text-muted">Paste your own Stripe and/or Ziina payment link. Riders tap Pay and money goes straight to you.</p>
@@ -30,7 +30,7 @@ export default async function SettingsPage() {
             <div className="space-y-1.5"><label className="text-sm font-medium">City</label><input name="city" defaultValue={o.city ?? ""} className="w-full px-3 py-2 rounded-lg border border-border text-sm" /></div>
             <div className="space-y-1.5"><label className="text-sm font-medium">Contact phone</label><input name="contact_phone" defaultValue={o.contact_phone ?? ""} className="w-full px-3 py-2 rounded-lg border border-border text-sm" /></div>
           </div>
-          <button className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-white text-sm font-medium">Save</button>
+          <button className="px-4 py-2 rounded-lg bg-primary hover:bg-primary-dark text-primary-on text-sm font-medium">Save</button>
         </form>
       </div>
     </>

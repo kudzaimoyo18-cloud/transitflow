@@ -45,12 +45,12 @@ export function RiderRouteMap({ routeId, stops, home }: Props) {
 
   return (
     <div className="relative">
-      <div className="absolute top-3 right-3 z-[500] px-2.5 py-1 rounded-full text-xs font-medium bg-white/90 border border-border shadow-sm flex items-center gap-1.5">
-        <span className={"w-2 h-2 rounded-full " + (live ? "bg-emerald-500 animate-pulse" : "bg-slate-300")} />
+      <div className="absolute top-3 right-3 z-[500] px-2.5 py-1 rounded-full text-xs font-medium bg-background/90 border border-border shadow-card flex items-center gap-1.5">
+        <span className={"w-2 h-2 rounded-full " + (live ? "bg-signal animate-pulse" : "bg-meta")} />
         {live ? "Bus is live" : "No bus running now"}
       </div>
       {points.length === 0 ? (
-        <div className="h-[300px] flex items-center justify-center text-muted text-sm bg-white">Map will show your bus once a trip starts.</div>
+        <div className="h-[300px] flex items-center justify-center text-muted text-sm bg-surface">Map will show your bus once a trip starts.</div>
       ) : (
         <BusMap points={points} className="w-full h-[300px]" />
       )}

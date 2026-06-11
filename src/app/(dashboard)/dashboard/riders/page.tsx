@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { requireContext } from "@/lib/session";
 import { confirmPayment, rejectPayment, recordCashPayment } from "../../actions";
 import { Check, X, MapPin } from "lucide-react";
@@ -7,10 +7,10 @@ function money(n: number, ccy: string) {
   return new Intl.NumberFormat("en-US", { style: "currency", currency: ccy, maximumFractionDigits: 0 }).format(n || 0);
 }
 const BADGE: Record<string, string> = {
-  active: "bg-emerald-50 text-emerald-700",
-  due: "bg-amber-50 text-amber-700",
-  overdue: "bg-red-50 text-red-700",
-  cancelled: "bg-slate-100 text-slate-500",
+  active: "bg-signal-soft text-signal",
+  due: "bg-warn-soft text-warn",
+  overdue: "bg-danger-soft text-danger",
+  cancelled: "bg-surface-2 text-meta",
 };
 
 export default async function RidersPage() {
@@ -33,9 +33,9 @@ export default async function RidersPage() {
 
   return (
     <>
-      <header className="px-6 py-4 border-b border-border bg-white"><h1 className="text-xl font-bold">Riders &amp; Payments</h1></header>
+      <header className="px-6 py-4 border-b border-border bg-background"><h1 className="font-display text-xl font-bold">Riders &amp; Payments</h1></header>
       <div className="p-6 space-y-6">
-        <section className="rounded-xl border border-border bg-white overflow-hidden">
+        <section className="rounded-xl border border-border bg-background overflow-hidden">
           <div className="px-4 py-3 border-b border-border flex items-center gap-2">
             <h2 className="font-semibold">Payments to confirm</h2>
             <span className="ml-auto text-sm text-muted">{pend.length} pending</span>
@@ -49,15 +49,15 @@ export default async function RidersPage() {
                     <p className="text-xs text-muted">{p.rider_subscriptions?.routes?.name} - {p.method.replace("_", " ")}{p.reference ? " - ref " + p.reference : ""}</p>
                   </div>
                   <span className="font-semibold">{money(Number(p.amount), p.currency)}</span>
-                  <form action={confirmPayment}><input type="hidden" name="id" value={p.id} /><button className="p-2 rounded-lg bg-emerald-50 text-emerald-700 hover:bg-emerald-100" title="Confirm"><Check className="w-4 h-4" /></button></form>
-                  <form action={rejectPayment}><input type="hidden" name="id" value={p.id} /><button className="p-2 rounded-lg bg-red-50 text-red-600 hover:bg-red-100" title="Reject"><X className="w-4 h-4" /></button></form>
+                  <form action={confirmPayment}><input type="hidden" name="id" value={p.id} /><button className="p-2 rounded-lg bg-signal-soft text-signal hover:opacity-80" title="Confirm"><Check className="w-4 h-4" /></button></form>
+                  <form action={rejectPayment}><input type="hidden" name="id" value={p.id} /><button className="p-2 rounded-lg bg-danger-soft text-danger hover:opacity-80" title="Reject"><X className="w-4 h-4" /></button></form>
                 </li>
               ))}
             </ul>
           )}
         </section>
 
-        <section className="rounded-xl border border-border bg-white overflow-hidden">
+        <section className="rounded-xl border border-border bg-background overflow-hidden">
           <div className="px-4 py-3 border-b border-border"><h2 className="font-semibold">Rider roster ({roster.length})</h2></div>
           {roster.length === 0 ? <div className="p-6 text-center text-muted text-sm">No riders yet. Share your invite code (Settings) so riders can join.</div> : (
             <div className="overflow-x-auto">

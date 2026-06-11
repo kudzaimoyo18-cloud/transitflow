@@ -1,4 +1,4 @@
-﻿import { createClient } from "@/lib/supabase/server";
+import { createClient } from "@/lib/supabase/server";
 import { requireContext } from "@/lib/session";
 import { SubscribeForm } from "./SubscribeForm";
 
@@ -15,8 +15,8 @@ export default async function SubscribePage() {
   }
   return (
     <div className="p-4 pt-6">
-      <h1 className="text-xl font-bold mb-1">Choose your route</h1>
-      <p className="text-sm text-muted mb-4">{rider?.organizations.name}</p>
+      <h1 className="font-display text-2xl font-bold mb-1">Choose your route</h1>
+      <p className="text-sm text-muted mb-5">{rider?.organizations.name}</p>
       <SubscribeForm routes={routes as never} currency={currency} />
     </div>
   );

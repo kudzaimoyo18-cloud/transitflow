@@ -94,7 +94,7 @@ export function DriverConsole({ orgId, driverName, routes, activeTrip }: { orgId
   return (
     <div className="min-h-screen flex flex-col">
       <header className="flex items-center justify-between p-4 border-b border-white/10">
-        <div className="flex items-center gap-2"><Bus className="w-5 h-5 text-primary" /><span className="font-bold">Driver</span></div>
+        <div className="flex items-center gap-2"><Bus className="w-5 h-5 text-signal" /><span className="font-display font-bold">Driver</span></div>
         <form action="/auth/signout" method="POST"><button className="text-white/60 hover:text-white"><LogOut className="w-4 h-4" /></button></form>
       </header>
 
@@ -104,20 +104,20 @@ export function DriverConsole({ orgId, driverName, routes, activeTrip }: { orgId
         {!trip ? (
           <div className="space-y-4">
             <label className="text-sm font-medium">Select route</label>
-            <select value={selectedRoute} onChange={(e) => setSelectedRoute(e.target.value)} className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white">
+            <select value={selectedRoute} onChange={(e) => setSelectedRoute(e.target.value)} className="w-full px-4 py-3 pill bg-white/10 border border-white/20 text-white">
               {routes.length === 0 && <option>No routes available</option>}
               {routes.map((r) => <option key={r.id} value={r.id} className="text-black">{r.name} {r.buses?.label ? "(" + r.buses.label + ")" : ""}</option>)}
             </select>
-            <button onClick={startTrip} disabled={busy || !selectedRoute} className="w-full py-4 rounded-xl bg-primary font-bold text-lg flex items-center justify-center gap-2 disabled:opacity-50">
+            <button onClick={startTrip} disabled={busy || !selectedRoute} className="w-full py-4 pill bg-white text-black font-bold text-lg flex items-center justify-center gap-2 disabled:opacity-50">
               <Play className="w-5 h-5" /> Start trip
             </button>
           </div>
         ) : (
           <div className="space-y-4">
-            <div className="rounded-xl bg-white/5 border border-white/10 p-4">
+            <div className="rounded-3xl bg-white/5 border border-white/10 p-5">
               <p className="font-semibold">{trip.routes?.name}</p>
               <div className="flex items-center gap-2 mt-2 text-sm">
-                <Radio className={"w-4 h-4 " + (streaming ? "text-emerald-400 animate-pulse" : "text-white/40")} />
+                <Radio className={"w-4 h-4 " + (streaming ? "text-signal animate-pulse" : "text-white/40")} />
                 {streaming ? "Broadcasting live location" : "Location off"}
                 {lastPing && <span className="text-white/40 ml-auto">last {lastPing}</span>}
               </div>
@@ -125,14 +125,14 @@ export function DriverConsole({ orgId, driverName, routes, activeTrip }: { orgId
                 {streaming ? (
                   <button onClick={stopStreaming} className="text-sm text-amber-400">Pause sharing</button>
                 ) : (
-                  <button onClick={() => startStreaming(trip.id)} className="text-sm text-emerald-400">Resume sharing</button>
+                  <button onClick={() => startStreaming(trip.id)} className="text-sm text-signal">Resume sharing</button>
                 )}
               </div>
             </div>
 
             <div className="grid grid-cols-2 gap-3">
-              <button onClick={() => event("picked_up", null)} className="py-4 rounded-xl bg-white/10 border border-white/15 flex flex-col items-center gap-1"><Users className="w-5 h-5" /><span className="text-sm">Picked up</span></button>
-              <button onClick={() => event("dropped_off", null)} className="py-4 rounded-xl bg-white/10 border border-white/15 flex flex-col items-center gap-1"><CheckCircle2 className="w-5 h-5" /><span className="text-sm">Dropped off</span></button>
+              <button onClick={() => event("picked_up", null)} className="py-4 rounded-3xl bg-white/10 border border-white/15 flex flex-col items-center gap-1"><Users className="w-5 h-5" /><span className="text-sm">Picked up</span></button>
+              <button onClick={() => event("dropped_off", null)} className="py-4 rounded-3xl bg-white/10 border border-white/15 flex flex-col items-center gap-1"><CheckCircle2 className="w-5 h-5" /><span className="text-sm">Dropped off</span></button>
             </div>
 
             {stops.length > 0 && (
@@ -140,13 +140,13 @@ export function DriverConsole({ orgId, driverName, routes, activeTrip }: { orgId
                 <p className="text-sm font-medium text-white/70">Arrived at stop</p>
                 <div className="grid grid-cols-2 gap-2">
                   {[...stops].sort((a, b) => a.position - b.position).map((s) => (
-                    <button key={s.id} onClick={() => event("arrived_stop", s.id)} className="py-2.5 rounded-lg bg-white/5 border border-white/10 text-sm flex items-center gap-1.5 px-3"><MapPin className="w-4 h-4 text-primary" />{s.name}</button>
+                    <button key={s.id} onClick={() => event("arrived_stop", s.id)} className="py-2.5 pill bg-white/5 border border-white/10 text-sm flex items-center gap-1.5 px-3"><MapPin className="w-4 h-4 text-signal" />{s.name}</button>
                   ))}
                 </div>
               </div>
             )}
 
-            <button onClick={endTrip} disabled={busy} className="w-full py-4 rounded-xl bg-red-500/90 font-bold flex items-center justify-center gap-2 disabled:opacity-50">
+            <button onClick={endTrip} disabled={busy} className="w-full py-4 pill bg-red-500/90 font-bold flex items-center justify-center gap-2 disabled:opacity-50">
               <Square className="w-5 h-5" /> End trip
             </button>
           </div>

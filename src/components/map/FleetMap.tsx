@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
@@ -63,7 +63,7 @@ export function FleetMap({ orgId }: { orgId: string }) {
   const points = Object.values(positions);
 
   return (
-    <div className="rounded-xl border border-border bg-white overflow-hidden">
+    <div className="rounded-xl border border-border bg-background overflow-hidden">
       <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <h2 className="font-semibold">Live fleet</h2>
         <span className="text-sm text-muted">{count} bus{count === 1 ? "" : "es"} running</span>

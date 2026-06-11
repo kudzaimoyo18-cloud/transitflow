@@ -1,4 +1,4 @@
-﻿import { redirect } from "next/navigation";
+import { redirect } from "next/navigation";
 import { requireContext } from "@/lib/session";
 import { CreateOrgForm } from "./CreateOrgForm";
 import { JoinForm } from "./JoinForm";
@@ -18,7 +18,7 @@ export default async function OnboardingPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-surface p-6">
-      <div className="w-full max-w-md bg-white rounded-2xl border border-border shadow-sm p-8">
+      <div className="w-full max-w-md bg-background rounded-2xl border border-border shadow-sm p-8">
         {role === "org_owner" ? (
           <CreateOrgForm name={ctx.profile?.full_name ?? ""} />
         ) : (

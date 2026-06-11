@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useEffect, useMemo, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
@@ -20,16 +20,16 @@ export function AlertsList({ userId, initial }: { userId: string; initial: N[] }
     return () => { supabase.removeChannel(channel); };
   }, [supabase, userId, initial]);
 
-  if (items.length === 0) return <p className="text-muted text-sm text-center pt-10">No alerts yet.</p>;
+  if (items.length === 0) return <p className="text-muted text-sm text-center pt-12">No alerts yet.</p>;
   return (
     <ul className="space-y-2">
       {items.map((n) => (
-        <li key={n.id} className="rounded-xl border border-border bg-white p-3 flex gap-3">
-          <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center shrink-0"><Bell className="w-4 h-4 text-primary" /></div>
+        <li key={n.id} className="rounded-2xl bg-surface p-4 flex gap-3">
+          <div className="pill w-9 h-9 bg-primary text-primary-on flex items-center justify-center shrink-0"><Bell className="w-4 h-4" /></div>
           <div className="min-w-0">
             <p className="font-medium text-sm">{n.title}</p>
             {n.body && <p className="text-sm text-muted">{n.body}</p>}
-            <p className="text-xs text-muted mt-0.5">{new Date(n.created_at).toLocaleString()}</p>
+            <p className="text-xs text-meta mt-0.5">{new Date(n.created_at).toLocaleString()}</p>
           </div>
         </li>
       ))}

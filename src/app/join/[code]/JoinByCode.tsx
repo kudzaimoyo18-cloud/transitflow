@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
@@ -18,7 +18,7 @@ export function JoinByCode({ code }: { code: string }) {
   return (
     <div className="space-y-3">
       {error && <p className="text-sm text-red-600">{error}</p>}
-      <button onClick={join} disabled={pending} className="w-full py-2.5 rounded-lg bg-primary text-white font-medium disabled:opacity-60 flex items-center justify-center gap-2">
+      <button onClick={join} disabled={pending} className="w-full py-2.5 pill bg-primary text-primary-on font-medium disabled:opacity-60 flex items-center justify-center gap-2">
         {pending && <Loader2 className="w-4 h-4 animate-spin" />} Join as rider
       </button>
     </div>
